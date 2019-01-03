@@ -11,6 +11,10 @@ var app = express();
 
 app.use(bodyParser.json());
 
+// console.log(new ObjectID())
+// var myHex = new ObjectID();
+// console.log(myHex.toHexString())
+
 app.post('/todos', (req, res) => {
   var todo = new Todo({
     text: req.body.text
