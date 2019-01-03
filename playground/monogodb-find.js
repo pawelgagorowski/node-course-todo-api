@@ -35,20 +35,31 @@ MongoClient.connect('mongodb://localhost:27017/TodoApp', (err, client) => {
   //   console.log("Unable to fetch")
   // })
 
-  db.collection('Users').find({name: "Pawel"}).toArray().then((result) => {
-    console.log('Users with Pawel name')
-    console.log(JSON.stringify(result, null, 2))
-  }, (err) => {
-    console.log("Unable to fetch")
-  })
-
-
-
-  // w wersji z callbackiem
-  // db.collection('Users').findOne({}, (err, result) => {
-  //   if (err) return err
-  //     console.log('Users');
-  //     console.log(JSON.stringify(result, null, 2))
-  //
+  // db.collection('Users').find({name: "Pawel"}).toArray().then((result) => {
+  //   console.log('Users with Pawel name')
+  //   console.log(JSON.stringify(result, null, 2))
+  // }, (err) => {
+  //   console.log("Unable to fetch")
   // })
+
+
+  //ile rekordów w kolekcji
+  // db.collection("todos").find({text).toArray().then((docs) => {
+  //   console.log(`Todo`);
+  //   console.log(JSON.stringify(docs, null, 2))
+  // }, (err) => {
+  //   console.log("Unable to fetch",e)
+  // })
+
+
+
+  //w wersji z callbackiem
+  db.collection('users').findOne({
+    email: 'pawelgagorowski026@gmail.com'
+  }, (err, result) => {
+    if (err) return err
+      console.log('Users');
+      console.log(JSON.stringify(result, null, 2))
+
+  })
 });
