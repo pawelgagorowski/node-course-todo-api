@@ -10,7 +10,9 @@ const todos = [{
   text: 'First test todo'
 },{
   _id: new ObjectID(),
-  text: "Second test todo"
+  text: "Second test todo",
+  completed: true,
+  completedAt: 333
 }]
 
 
@@ -76,7 +78,7 @@ describe('GET /todos', () => {
 describe('GET /todos/:id', () => {
   it('should return todo doc', (done) => {
     request(app)
-    .get(`/todos/${todos[0]._id.toHexString()}`)
+    .get(`/todos/${todos[0]._id.toString()}`)
     .expect(200)
     .expect((res) => {
       expect(res.body.todo.text).toBe(todos[0].text);
@@ -85,7 +87,7 @@ describe('GET /todos/:id', () => {
   })
 
   it('should return 404 if todo not found', (done) => {
-    var hexId = new ObjectID().toHexString()
+    var hexId = new ObjectID().toString()
     request(app)
     .get(`/todos/${hexId}`)
     .expect(404)
@@ -112,22 +114,138 @@ describe('DELETE /todos/:id', () => {
       if (err) {
         return done(err)
       }
-      Todo.findById(todos[0]._id).then((todo)=> {
+      Todo.findById(todos[0]._id).then((todo) => {
         expect(todo).toBeFalsy();
         done();
       })
     })
   })
   it('should return 404 if todo not find', (done) => {
-    var newId = new ObjectID()
+    var newId = new ObjectID();
     request(app)
     .delete(`/todos/${newId}`)
     .expect(404)
     .end(done)
+  });
+
+  it('it should return 404 for non-object ids', (done) => {
+    request(app)
+    .delete('/todos/1234asd')
+    .expect(404)
+    .end(done)
     })
-    it('it should return 404 for noo-object ids', (done) => {
+  })
+
+  // describe('PATH', () => {
+  //   it('should update the todo', (done) => {
+  //     var stringId = todos[0]._id.toString()
+  //     var text = "this should be new text";
+  //
+  //     request(app)
+  //     .patch(`/todos/${stringId}`)
+  //     .send({
+  //       completed: true,
+  //       text
+  //     })
+  //     .expect(200)
+  //     .expect((res) => {
+  //       expect(res.body.todo.text).toBe(text);
+  //       expect(res.body.todo.completed).toBe(true)
+  //       expect(typeof res.body.todo.completedAt).toBe('number')
+  //     })
+  //     .end(done)
+  //   })
+  //   it('should clear completedAt when todo is not completed', (done) => {
+  //     var stringId = todos[1]._id.toString()
+  //     var text = "this should be new text!!";
+  //
+  //     request(app)
+  //     .patch(`/todos/${stringId}`)
+  //     .send({
+  //       completed: false,
+  //       text
+  //     })
+  //     .expect(200)
+  //     .expect((res) => {
+  //       expect(res.body.todo.text).toBe(text);
+  //       expect(res.body.todo.completed).toBe(false);
+  //       expect(res.body.todo.completedAt).toBeFalsy();
+  //     })
+  //     .end(done)
+  //   })
+  // })
+
+
+  describe('PATH /todos/:id', () => {
+    it('should update the todo', (done) => {
+      var stringId = todos[0]._id.toString();
+      var text = "this should be new text";
+
       request(app)
-      .delete('/todos/1234asd')
+      .patch(`/todos/${stringId}`)
+      .send({
+        completed: true,
+        text,
+        mojtext: "cos tam"
+      })
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.todo.text).toBe(text);
+        expect(res.body.todo.completed).toBe(true)
+        expect(typeof res.body.todo.completedAt).toBe('number');
+      })
+      .end((err, res) => {
+        if(err) {
+          return done(err)
+        }
+        Todo.findById(todos[0]._id).then((todo) => {
+          expect(todo.text).toBe(text)
+          expect(todo.completed).toBe(true)
+          expect(typeof todo.completedAt).toBe('number')
+          done();
+        }).catch((e) => done(e))
+      })
+    });
+
+    it('should clear completedAt when todo is not completed', (done) => {
+      var stringId = todos[1]._id.toString()
+      var text = "this should be new text!!";
+
+      request(app)
+      .patch(`/todos/${stringId}`)
+      .send({
+        completed: false,
+        text
+      })
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.todo.text).toBe(text);
+        expect(res.body.todo.completed).toBe(false);
+        expect(res.body.todo.completedAt).toBeFalsy();
+      })
+      .end((err, res) => {
+        if(err) {
+          return done(err)
+        }
+        Todo.findById(stringId).then((todo) => {
+          expect(todo.text).toBe(text)
+          expect(todo.completed).toBe(false)
+          expect(todo.completedAt).toBeFalsy();
+          done();
+        }).catch((e) => done(e))
+      })
+    });
+    it('should return 404 if todo not found', (done) => {
+      var hexId = new ObjectID().toString()
+      request(app)
+      .get(`/todos/${hexId}`)
+      .expect(404)
+      .end(done)
+    })
+
+    it('should return 404 for non-object ids', (done) => {
+      request(app)
+      .get('/todos/123abd')
       .expect(404)
       .end(done)
     })
