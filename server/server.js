@@ -13,6 +13,12 @@ const app = express();
 var port = process.env.PORT;
 app.use(bodyParser.json());
 
+app.use('/', (req, res, next) => {
+  console.log(req.method)
+  console.log(req.url)
+  next();
+})
+
 // console.log(new ObjectID())
 // var myHex = new ObjectID();
 // console.log(myHex.toHexString())
