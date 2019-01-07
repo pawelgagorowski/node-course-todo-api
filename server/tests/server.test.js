@@ -136,46 +136,6 @@ describe('DELETE /todos/:id', () => {
     })
   })
 
-  // describe('PATH', () => {
-  //   it('should update the todo', (done) => {
-  //     var stringId = todos[0]._id.toString()
-  //     var text = "this should be new text";
-  //
-  //     request(app)
-  //     .patch(`/todos/${stringId}`)
-  //     .send({
-  //       completed: true,
-  //       text
-  //     })
-  //     .expect(200)
-  //     .expect((res) => {
-  //       expect(res.body.todo.text).toBe(text);
-  //       expect(res.body.todo.completed).toBe(true)
-  //       expect(typeof res.body.todo.completedAt).toBe('number')
-  //     })
-  //     .end(done)
-  //   })
-  //   it('should clear completedAt when todo is not completed', (done) => {
-  //     var stringId = todos[1]._id.toString()
-  //     var text = "this should be new text!!";
-  //
-  //     request(app)
-  //     .patch(`/todos/${stringId}`)
-  //     .send({
-  //       completed: false,
-  //       text
-  //     })
-  //     .expect(200)
-  //     .expect((res) => {
-  //       expect(res.body.todo.text).toBe(text);
-  //       expect(res.body.todo.completed).toBe(false);
-  //       expect(res.body.todo.completedAt).toBeFalsy();
-  //     })
-  //     .end(done)
-  //   })
-  // })
-
-
   describe('PATH /todos/:id', () => {
     it('should update the todo', (done) => {
       var stringId = todos[0]._id.toString();
@@ -227,6 +187,8 @@ describe('DELETE /todos/:id', () => {
         if(err) {
           return done(err)
         }
+
+        //this is what I should get in my database
         Todo.findById(stringId).then((todo) => {
           expect(todo.text).toBe(text)
           expect(todo.completed).toBe(false)
