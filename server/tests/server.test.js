@@ -187,7 +187,6 @@ describe('DELETE /todos/:id', () => {
         if(err) {
           return done(err)
         }
-
         //this is what I should get in my database
         Todo.findById(stringId).then((todo) => {
           expect(todo.text).toBe(text)
@@ -200,14 +199,14 @@ describe('DELETE /todos/:id', () => {
     it('should return 404 if todo not found', (done) => {
       var hexId = new ObjectID().toString()
       request(app)
-      .get(`/todos/${hexId}`)
+      .patch(`/todos/${hexId}`)
       .expect(404)
       .end(done)
     })
 
     it('should return 404 for non-object ids', (done) => {
       request(app)
-      .get('/todos/123abd')
+      .patch('/todos/123abd')
       .expect(404)
       .end(done)
     })

@@ -1,6 +1,7 @@
-const mongoose = require('mongoose')
-const validator = require('validator')
-const jwt = require('jsonwebtoken')
+const mongoose = require('mongoose');
+const validator = require('validator');
+const jwt = require('jsonwebtoken');
+const _ = require('lodash');
 
 var UserSchema = new mongoose.Schema({
   email: {
@@ -31,21 +32,64 @@ var UserSchema = new mongoose.Schema({
     }]
   })
 
-
-
-  UserSchema.methods.generateAuthToken = function () {
+  UserSchema.methods.toJSON = function () {
     var user = this;
-    var access = 'auth';
-    var token = jwt.sign({_id: user._id.toHexString(), access}, 'abc123').toString();
+    var userObject = user.toObject();
 
-    user.tokens.push({access, token});
+    return _.pick(userObject, ['_id', 'email'])
 
-    return user.save().then(() => {
-      return token;
+  }
+
+  UserSchema.statics.findByToken = function (token) {
+    var User = this;
+    var decoded;
+    try {
+      decoded = jwt.verify(token, 'abc123');
+      console.log(decoded)
+    } catch (e) {
+      // return new Promise (resolve, reject) => {
+      //   reject();
+      // }
+
+      //albo
+
+      return Promise.reject('test');
+    }
+
+    return User.findOne({
+      _id: decoded._id,
+      'tokens.token': token,
+      'tokens.access': 'auth'
+    })
+
+  }
+
+
+// metoda pierwsza według instruktora
+
+  // UserSchema.methods.generateAuthToken = function () {
+  //   var user = this;
+  //   var access = 'auth';
+  //   var token = jwt.sign({_id: user._id.toHexString(), access}, 'abc123').toString();
+  //
+  //   user.tokens.push({access, token});
+  //
+  //   return user.save().then(() => {
+  //     return token;
+  //   });
+  // };
+
+// metoda druga z Promise
+  UserSchema.methods.generateAuthToken = function () {
+    return new Promise((resolve, reject) => {
+        const user = this;
+        const access = 'auth';
+
+        const token = jwt.sign({_id: user._id.toHexString(), access}, 'abc123').toString();
+
+        resolve({access, token});
     });
-  };
-
-
+};
 
 var User = mongoose.model('User', UserSchema)
 

@@ -12,48 +12,75 @@ var data = {
 // var decoded = jwt.verify(token, '123abc');
 // console.log('decoded', decoded)
 
-var UserSchema = new mongoose.Schema({
-  email: {
-    type: String,
-    required: true,
-    trim: true,
-    minlength: 1,
-    unique: true,
-    validate: {
-      validator: "costma"
-      },
-      message:'${VALUE} is not a valid phone number!'
-    },
-  password: {
-    type: String,
-    require: true,
-    minlength: 6,
-  },
-  tokens: [{
-    access: {
-      type: String,
-      required: true
-    },
-    token: {
-      type: String,
-      required: true
-      }
-    }]
-  })
+// var UserSchema = new mongoose.Schema({
+//   email: {
+//     type: String,
+//     required: true,
+//     trim: true,
+//     minlength: 1,
+//     unique: true,
+//     validate: {
+//       validator: "costma"
+//       },
+//       message:'${VALUE} is not a valid phone number!'
+//     },
+//   password: {
+//     type: String,
+//     require: true,
+//     minlength: 6,
+//   },
+//   tokens: [{
+//     access: {
+//       type: String,
+//       required: true
+//     },
+//     token: {
+//       type: String,
+//       required: true
+//       }
+//     }]
+//   })
 
 
-  var user = new UserSchema;
-  console.log(user)
-    var user = this;
-    var access = 'auth';
-    var token = {
-      data: "myId",
-      hexL: "id"
-    }
-    user.tokens.push({access, token})
+  // var user = new UserSchema;
+  // console.log(user)
+  //   var user = this;
+  //   var access = 'auth';
+  //   var token = {
+  //     data: "myId",
+  //     hexL: "id"
+  //   }
+  //   user.tokens.push({access, token})
 
 
 
+
+
+
+
+
+var imie = "pawel"
+var nazwisko = "gagor"
+var body;
+
+// body = {
+//   dupa:"pawel",
+//   nazwisko: "gagor"
+// }
+
+var body;
+body.toObject();
+
+body.token = {imie, nazwisko}
+console.log(JSON.stringify(body,null,2))
+
+
+var myObj = {
+ imie: "pawel",
+ nazwisko: "gagor"
+}
+
+console.log()
 
 
 
