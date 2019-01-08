@@ -1,10 +1,16 @@
 const {SHA256} = require('crypto-js');
 const jwt = require('jsonwebtoken');
-const mongoose = require('mongoose')
+const bcrypt = require('bcryptjs');
+const mongoose = require('mongoose');
 
-var data = {
-  id: 10
-}
+
+
+
+// ***************************** JWT W AKCJI *****************************
+
+// var data = {
+//   id: 10
+// }
 
 // var token = jwt.sign(data, '123abc')
 // console.log(token)
@@ -53,40 +59,36 @@ var data = {
   //   user.tokens.push({access, token})
 
 
+// ***************************** MODYFIKOWANIE OBIEKTU ********************
 
-
-
-
-
-
-var imie = "pawel"
-var nazwisko = "gagor"
-var body;
+// var imie = "pawel"
+// var nazwisko = "gagor"
+// var body;
 
 // body = {
 //   dupa:"pawel",
 //   nazwisko: "gagor"
 // }
 
-var body;
-body.toObject();
+// var body;
+// body.toObject();
+//
+// body.token = {imie, nazwisko}
+// console.log(JSON.stringify(body,null,2))
+//
+//
+// var myObj = {
+//  imie: "pawel",
+//  nazwisko: "gagor"
+// }
 
-body.token = {imie, nazwisko}
-console.log(JSON.stringify(body,null,2))
-
-
-var myObj = {
- imie: "pawel",
- nazwisko: "gagor"
-}
-
-console.log()
-
-
+// console.log()
 
 
 
 
+
+// ***************************** JSON WEB TOKEN OD ŚRODKA **********************
 
 // var message = "I am user number 3"
 // var hash = SHA256(message).toString();
@@ -97,6 +99,7 @@ console.log()
 // var data = {
 //   id: 4,
 // };
+
 // var token = {
 //   data,
 //   hash: SHA256(JSON.stringify(data) + 'somesecret').toString()
@@ -113,3 +116,24 @@ console.log()
 // } else {
 //   console.log('Data was changed. Do not trust it')
 // }
+
+
+
+
+
+
+// **************** HASHOWANIE HASŁA Z BCRYPT ***************************
+
+var password = '123abc!'
+
+bcrypt.genSalt(10, (err, salt) => {
+  bcrypt.hash(password, salt, (err, hash) => {
+    console.log(hash)
+  })
+})
+
+var hashedPassword = '$2a$10$F/WFeijmrwhVdb3ZiFXdlemYzFK5hiqDNRP5tDOU7mjsLYsXc7i4C';
+
+bcrypt.compare("123", hashedPassword, (err, res) => {
+  console.log(res)
+})
