@@ -64,7 +64,7 @@ var UserSchema = new mongoose.Schema({
     var User = this;
     var decoded;
     try {
-      decoded = jwt.verify(token, 'abc123');
+      decoded = jwt.verify(token, process.env.JWT_SECRET);
       console.log(decoded)
     } catch (e) {
       // return new Promise (resolve, reject) => {
@@ -105,7 +105,7 @@ var UserSchema = new mongoose.Schema({
         const user = this;
         const access = 'auth';
 
-        const token = jwt.sign({_id: user._id.toHexString(), access}, 'abc123').toString();
+        const token = jwt.sign({_id: user._id.toHexString(), access}, process.env.JWT_SECRET).toString();
 
         resolve({access, token});
     });

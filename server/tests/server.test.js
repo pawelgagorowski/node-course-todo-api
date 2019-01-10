@@ -304,7 +304,7 @@ describe('DELETE /todos/:id', () => {
         User.findOne({email}).then((user) => {
           expect(user).toBeTruthy();
           expect(user.email).toBe(email);
-          expect(user.tokens[0].token).toBe(jwt.sign({_id: user._id, access: 'auth'}, 'abc123').toString())
+          expect(user.tokens[0].token).toBe(jwt.sign({_id: user._id, access: 'auth'}, process.env.JWT_SECRET).toString())
           done();
         }).catch((e) => done(e))
       })
